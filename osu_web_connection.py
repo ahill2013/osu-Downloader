@@ -1,7 +1,7 @@
-import requests
 import os
 
-from beatmap import *
+import requests
+
 
 class OsuWebConnection:
     login_url = "https://osu.ppy.sh/forum/ucp.php?mode=login"
@@ -16,37 +16,37 @@ class OsuWebConnection:
     def do_login(self):
         print("Logging in osu! site with user " + self.login + "....")
         r = self.session.post(OsuWebConnection.login_url,
-                data={'redirect': '/',
-                    'sid': '',
-                    'username': self.login,
-                    'password': self.password,
-                    'login': 'login'})
-        #print(r.headers)
+                              data={'redirect': '/',
+                                    'sid': '',
+                                    'username': self.login,
+                                    'password': self.password,
+                                    'login': 'login'})
+        # print(r.headers)
 
     def is_logged(self):
         r = self.session.get(OsuWebConnection.login_url)
         text = r.text
         if "Username:" in text and "Password:" in text and \
-           "Log me on automatically each visit" in text and \
-           "Hide my online status this session" in text:
+                "Log me on automatically each visit" in text and \
+                "Hide my online status this session" in text:
             return False
         elif "Announcements (click for more)" in text:
             return True
         return False
 
-    def download_beatmap(self, beatmap, base_path):
+    def download_sync(self, id, base_path):
         if not self.is_logged():
             self.do_login()
 
-        beatmap_url = "https://osu.ppy.sh/d/" + beatmap.beatmapset_id
+        beatmap_url = "https://osu.ppy.sh/d/" + id
         r = self.session.get(beatmap_url, stream=True)
 
         if r.headers['Content-Type'] != "application/download":
             # beatmap not available
-            beatmap.download_status = "NOT AVAILABLE"
+            # beatmap.download_status = "NOT AVAILABLE"
             return
 
-        filename_base = beatmap.beatmapset_id + " " + beatmap.artist + " - " + beatmap.title
+        filename_base = id
         filename_temp = filename_base + ".temp"
         filename_final = filename_base + ".osz"
         # beatmap available, download it
@@ -61,8 +61,7 @@ class OsuWebConnection:
                     print(str(int(counter / 1024)) + " bytes |", end='')
         os.rename(base_path + "/" + filename_temp, base_path + "/" + filename_final)
         print("Finished download of '" + filename_final + "'")
-        beatmap.download_status = "DOWNLOADED"
-
+        # beatmap.download_status = "DOWNLOADED"
 
     def close(self):
         self.session.close()
