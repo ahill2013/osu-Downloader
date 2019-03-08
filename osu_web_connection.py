@@ -1,4 +1,5 @@
 import os
+import sys
 
 import requests
 
@@ -58,9 +59,13 @@ class OsuWebConnection:
                 if chunk:
                     f.write(chunk)
                     counter += 1023
-                    print(str(int(counter / 1024)) + " bytes |", end='')
+                    percent_done = counter / int(r.headers['Content-Length']) * 100
+                    # print("%d %f%%\n" % (counter, percent_done))
+                    sys.stdout.write("\r [%-20s] %d%%  (%.2fMB/%.2fMB)" %
+                                     ('='*int(percent_done/5), int(percent_done), counter / 1024 / 1024, filesize))
+                    sys.stdout.flush()
         os.rename(base_path + "/" + filename_temp, base_path + "/" + filename_final)
-        print("Finished download of '" + filename_final + "'")
+        print("\nFinished download of '" + filename_final + "'")
         # beatmap.download_status = "DOWNLOADED"
 
     def close(self):

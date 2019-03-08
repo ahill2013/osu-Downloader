@@ -1,4 +1,4 @@
-<img alt="Custom badge" src="https://img.shields.io/badge/python-3.5-brightgreen.svg?logo=python">
+<img alt="Custom badge" src="https://img.shields.io/badge/python-3.5-brightgreen.svg?logo=python&logoColor=yellow">
 
 # osu-library-syncer
 
