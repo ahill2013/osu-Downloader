@@ -1,3 +1,5 @@
+<img alt="Custom badge" src="https://img.shields.io/badge/python-3.5-brightgreen.svg?logo=python">
+
 # osu-library-syncer
 
 osu! library syncer is a script to help download beatmaps from the osu! site.
@@ -17,7 +19,7 @@ internet connection speeds are an issue.
 ### sync
 
 ```
-$ ./downloader.py sync [osu! Songs directory]
+$ python ./downloader.py sync [osu! Songs directory]
 ```
 
 This command creates a file called `sync_list.txt` in the osu! songs directory
@@ -36,4 +38,5 @@ was scoped down to a more niche and specialized purpose.
 
 ## License
 
-This project uses the GNU GPL 3.0 License. The license can be found in the root directory of the project.
+This project uses the GNU GPL 3.0 License. The license can be found in the root
+directory of the project.
