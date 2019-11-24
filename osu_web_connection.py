@@ -3,6 +3,7 @@ import sys
 
 import requests
 from bs4 import BeautifulSoup
+from urllib.parse import unquote
 
 
 def convert_to_valid_filename(filename):
@@ -77,9 +78,15 @@ class OsuWebConnection:
         if 'Page Missing' in r.text:
             # beatmap not available
             # beatmap.download_status = "NOT AVAILABLE"
-            return
+            sys.stdout.write("Beatmap " + str(beatmap_id) + " not available.")
+            sys.stdout.flush()
+            return -1
 
-        filename_base = convert_to_valid_filename(beatmap_id)
+        soup = BeautifulSoup(r.text, 'html.parser')
+        href = soup.find('a')
+        name = unquote(href.text).split("fs=", 2)[1].split(".osz", 2)[0]
+
+        filename_base = convert_to_valid_filename(name)
         filename_temp = filename_base + ".temp"
         filename_final = filename_base + ".osz"
         # beatmap available, download it
@@ -101,8 +108,10 @@ class OsuWebConnection:
                                      ('='*int(percent_done/5), int(percent_done), counter / 1024 / 1024, filesize))
                     sys.stdout.flush()
         os.rename(base_path + "/" + filename_temp, base_path + "/" + filename_final)
-        print("\nFinished download of '" + filename_final + "'")
+        sys.stdout.write("\nFinished download of '" + filename_final + "'")
+        sys.stdout.flush()
         # beatmap.download_status = "DOWNLOADED"
+        return 0
 
     def close(self):
         self.session.close()

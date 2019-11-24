@@ -30,14 +30,23 @@ def sync_list_update(sync_list, curr_list):
 
 def sync_download(new_list, wdir):
     conn = OsuWebConnection()
+    c = 0
+    ulist = []
     for item in new_list:
-        conn.download_sync(item, wdir)
-        for t in range(10, 0, -1):
-            sys.stdout.write("\r Waiting %d seconds for next download... (because peppy gets mad)" % t)
+        r = conn.download_sync(item, wdir)
+        if r == -1:
+            ulist.append(item)
+        c += 1
+        print(" (" + str(c) + "/" + str(len(new_list)) + ")")
+        if r == 0:
+            for t in range(10, 0, -1):  # waiting because peppy gets mad
+                sys.stdout.write("\r Waiting %d seconds for next download..." % t)
+                sys.stdout.flush()
+                time.sleep(1)
+            sys.stdout.write("\r")
             sys.stdout.flush()
-            time.sleep(1)
-        sys.stdout.write("\r")
-        sys.stdout.flush()
+    if ulist:
+        print("Unavailable beatmaps: " + str(ulist))
     conn.close()
 
 
