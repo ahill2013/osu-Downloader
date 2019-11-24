@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os.path
-import sys
+import time
 
 from osu_web_connection import *
 
@@ -32,6 +32,12 @@ def sync_download(new_list, wdir):
     conn = OsuWebConnection()
     for item in new_list:
         conn.download_sync(item, wdir)
+        for t in range(10, 0, -1):
+            sys.stdout.write("\r Waiting %d seconds for next download... (because peppy gets mad)" % t)
+            sys.stdout.flush()
+            time.sleep(1)
+        sys.stdout.write("\r")
+        sys.stdout.flush()
     conn.close()
 
 

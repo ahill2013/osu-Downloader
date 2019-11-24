@@ -14,12 +14,20 @@ playing, so when in a private multi lobby with friends, you no longer have to
 wait to download each new song that you may not have; especially if slow
 internet connection speeds are an issue.
 
+## Dependancies
+
+If not already installed on your system, the following modules may need to be installed.
+```shell script
+pip install requests
+pip install beautifulsoup4
+```
+
 ## Commands and arguments
 
 ### sync
 
-```
-$ python ./downloader.py sync [osu! Songs directory]
+```shell script
+python downloader.py sync [osu! Songs directory]
 ```
 
 This command creates a file called `sync_list.txt` in the osu! songs directory
